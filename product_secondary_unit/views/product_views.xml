@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Copyright 2018 Tecnativa - Sergio Teruel
+     License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl). -->
+<odoo>
+    <!--<record id="product_template_form_view" model="ir.ui.view">
+        <field name="name">Product template Secondary Unit</field>
+        <field name="model">product.template</field>
+        <field name="inherit_id" ref="product.product_template_form_view" />
+        <field name="groups_id" eval="[(4, ref('uom.group_uom'))]" />
+        <field name="arch" type="xml">
+            <xpath expr="//page[@name='general_information']" position="inside">
+                <group string="Secondary Unit of Measure">
+                    <field name="secondary_uom_ids" nolabel="1">
+                        <tree editable="top" decoration-muted="(not active)">
+                            <field name="active" widget="boolean_toggle" />
+                            <field name="code" />
+                            <field name="name" />
+                            <field name="uom_id" />
+                            <field name="factor" />
+                            <field name="dependency_type" />
+                        </tree>
+                    </field>
+                </group>
+            </xpath>
+
+        </field>
+    </record>-->
+    <record id="product_template_form_secondary_view" model="ir.ui.view">
+        <field name="name">Product Form Secondary Unit</field>
+        <field name="model">product.template</field>
+        <field name="inherit_id" ref="product.product_template_only_form_view" />
+        <field name="groups_id" eval="[(4, ref('uom.group_uom'))]" />
+        <field name="arch" type="xml">
+            <xpath expr="//page[@name='variants']" position="after">
+                        <page name="Disable Secondary Fields" string="Disable Secondary Fields">
+                            <group colspan="4" col="5" name="editable_secondary_fields">
+                                <field name="disable_subtotal"/>
+                                <field name="disable_uom"/>
+                                <field name="disable_second_quantity"/>
+                                <field name="disable_second_uom"/>
+                            </group>
+                        </page>
+                </xpath>
+
+
+                <xpath expr="//page[@name='variants']" position="after">
+                        <page name="Editable Secondary Fields" string="Editable Secondary Fields">
+                            <group colspan="4" col="5" name="editable_secondary_fields">
+                                <field name="editable_subtotal"/>
+                                <field name="editable_uom"/>
+                                <field name="editable_second_quantity"/>
+                                <field name="editable_second_uom"/>
+                            </group>
+                        </page>
+                </xpath>
+
+
+
+        </field>
+
+    </record>
+
+
+</odoo>

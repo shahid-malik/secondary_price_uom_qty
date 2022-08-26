@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <template id="invoice_report_pdf" inherit_id="account.report_invoice_document">
+
+            <xpath expr="//th[@name='th_quantity']" position="after">
+                <th name="th_uom" class="text-right"><span>UoM</span></th>
+                <th name="2nd_qty" class="text-right"><span>2nd QTY</span></th>
+                <th name="2nd_uom" class="text-right"><span>2nd UoM</span></th>
+                <th name="2nd_price" class="text-right"><span>2nd Price</span></th>
+            </xpath>
+
+            <xpath expr="//span[@t-field='line.quantity']" position="after">
+                <td>
+                <span t-field="line.product_uom_id"/>
+                </td>
+                <td>
+                <span t-field="line.secondary_uom_qty"/>
+                </td>
+                <td>
+                <span t-field="line.secondary_uom_id"/>
+                </td>
+                <td>
+                <span t-field="line.secondary_price"/>
+                </td>
+            </xpath>
+
+
+
+        </template>
+    </data>
+</odoo>

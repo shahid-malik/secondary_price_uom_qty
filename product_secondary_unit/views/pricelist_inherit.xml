@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <record id="product_pricelist_form_secondary_price" model="ir.ui.view">
+        <field name="name">Product Pricelist Form Secondary Price</field>
+        <field name="model">product.pricelist</field>
+        <field name="inherit_id" ref="product.product_pricelist_view"/>
+        <field name="groups_id" eval="[(4, ref('uom.group_uom'))]"/>
+        <field name="arch" type="xml">
+
+
+
+
+        </field>
+
+    </record>
+</odoo>

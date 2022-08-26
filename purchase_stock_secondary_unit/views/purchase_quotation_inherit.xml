@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <template id="quotation_report_pdf" inherit_id="purchase.report_purchaseorder_document">
+
+            <xpath expr="//th[@name='th_price_unit']" position="replace"/>
+            <xpath expr="//th[@name='th_taxes']" position="replace"/>
+            <xpath expr="//th[@name='th_date_req']" position="replace"/>
+
+            <xpath expr="//th[@name='th_quantity']" position="replace"/>
+
+            <xpath expr="//span[@t-field='line.product_qty']" position="replace"/>
+            <xpath expr="//span[@t-field='line.product_uom.name']" position="replace"/>
+
+            <xpath expr="//span[@t-field='line.price_unit']" position="replace"/>
+            <xpath expr="//span[@t-field='line.date_planned']" position="replace"/>
+
+            <xpath expr="//th[@name='th_description']" position="after">
+
+                <th name="th_qty" class="text-right">
+                    <span>QTY</span>
+                </th>
+                <th name="th_uom" class="text-right">
+                    <span>UoM</span>
+                </th>
+                <th name="th_2ndqty" class="text-right">
+                    <span>2nd QTY</span>
+                </th>
+                <th name="th_2nduom" class="text-right">
+                    <span>2nd UoM</span>
+                </th>
+                <th name="th_price_unit" class="text-right">
+                    <span>Price Unit</span>
+                </th>
+
+            </xpath>
+
+            <xpath expr="//td[@name='td_taxes']" position="after">
+
+                <td>
+                    <span t-field="line.product_qty"/>
+                </td>
+                <td>
+                    <span t-field="line.product_uom"/>
+                </td>
+                <td>
+                    <span t-field="line.secondary_uom_qty"/>
+                </td>
+                <td>
+                    <span t-field="line.secondary_uom_id"/>
+                </td>
+                <td>
+                    <span t-field="line.price_unit"/>
+                </td>
+            </xpath>
+
+
+        </template>
+
+         <template id="request_quotation_report_pdf" inherit_id="purchase.report_purchasequotation_document">
+
+             <xpath expr="//th[@name='th_quantity']" position="replace"/>
+             <xpath expr="//span[@t-field='order_line.product_qty']" position="replace"/>
+             <xpath expr="//span[@t-field='order_line.product_uom']" position="replace"/>
+
+             <xpath expr="//th[@name='th_description']" position="after">
+                 <th name="th_qty" class="text-right">
+                    <span></span>
+                </th>
+                 <th name="th_qty" class="text-right">
+                    <span>QTY</span>
+                </th>
+                <th name="th_uom" class="text-right">
+                    <span>UoM</span>
+                </th>
+                <th name="th_2ndqty" class="text-right">
+                    <span>2nd QTY</span>
+                </th>
+                <th name="th_2nduom" class="text-right">
+                    <span>2nd UoM</span>
+                </th>
+                 <th name="th_price_unit" class="text-right">
+                    <span>Price Unit</span>
+                </th>
+                 <th name="th_second_purchase" class="text-right">
+                    <span>2nd Purchase Price</span>
+                </th>
+             </xpath>
+
+
+
+             <xpath expr="//td[@id='product']" position="after">
+                 <td>
+                    <span></span>
+                </td>
+                <td>
+                    <span t-field="order_line.product_qty"/>
+                </td>
+
+                 <td>
+                    <span t-field="order_line.product_uom"/>
+                </td>
+
+                 <td>
+                    <span t-field="order_line.secondary_uom_qty"/>
+                </td>
+                 <td>
+                    <span t-field="order_line.secondary_uom_id"/>
+                </td>
+                 <td>
+                    <span t-field="order_line.price_unit"/>
+                </td>
+                 <td>
+                    <span t-field="order_line.secondary_purchase_price"/>
+                </td>
+             </xpath>
+
+         </template>
+    </data>
+</odoo>

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <record id="view_stock_form" model="ir.ui.view">
+        <field name="name">Stock View</field>
+        <field name="model">stock.picking</field>
+        <field name="inherit_id" ref="stock.view_picking_form"/>
+        <field name="groups_id" eval="[(4, ref('uom.group_uom'))]" />
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='move_ids_without_package']//tree//field[@name='product_uom']" position="replace">
+
+            </xpath>
+            <xpath expr="//field[@name='move_ids_without_package']//tree//field[@name='product_uom_qty']" position="replace">
+
+            </xpath>
+            <xpath expr="//field[@name='move_ids_without_package']//tree//field[@name='secondary_uom_qty']" position="attributes">
+                <attribute name="string">2nd QTY</attribute>
+            </xpath>
+            <xpath expr="//field[@name='move_ids_without_package']//tree//field[@name='secondary_uom_id']" position="attributes">
+                <attribute name="string">2nd UoM</attribute>
+            </xpath>
+            <xpath expr="//field[@name='move_ids_without_package']//tree//field[@name='product_id']" position="after">
+                <field name="product_uom_qty" string="Quantity"/>
+                <field name="product_uom" string="UoM"/>
+
+            </xpath>
+            <xpath expr="//field[@name='move_ids_without_package']//tree//field[@name='secondary_uom_id']" position="after">
+                <field name="price_unit"/>
+
+            </xpath>
+        </field>
+    </record>
+</odoo>
