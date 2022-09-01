@@ -69,8 +69,6 @@
 
                 <!--<field name="price_unit"/>-->
                 <field name="secondary_sale_price"/>
-                <field name="enable_conversions" invisible="1"/>
-
             </xpath>
 
         </field>

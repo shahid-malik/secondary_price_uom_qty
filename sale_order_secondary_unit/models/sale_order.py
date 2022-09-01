@@ -16,7 +16,6 @@ class SaleOrderLine(models.Model):
         ondelete="restrict",
     )
     secondary_sale_price = fields.Float('2nd Price', default=0.0)
-    enable_conversions = fields.Boolean(related='product_id.is_secondary_conversions')
 
     @api.onchange("secondary_uom_id", "secondary_uom_qty")
     def onchange_secondary_uom(self):
@@ -134,13 +133,19 @@ class SaleOrderLine(models.Model):
     def onchange_price_subtotal(self):
         if self.price_subtotal and self.price_unit:
             self.product_uom_qty = self.price_subtotal / self.price_unit
-            
+
     @api.onchange('price_unit')
     def _onchange_price_unit(self):
         if self.product_id.is_secondary_conversions:
             self.secondary_sale_price = self.price_unit * self.secondary_uom_id.factor_inv
         else:
             self.secondary_sale_price = self.price_unit
+
+    @api.onchange('secondary_sale_price')
+    def onchange_secondary_sale_price(self):
+        if self.product_id.is_secondary_conversions:
+            factor = self.secondary_uom_id.factor_inv
+            self.price_unit = self.secondary_sale_price / factor
 
     # @api.onchange('enable_conversions')
     # def _onchange_enable_conversions(self):

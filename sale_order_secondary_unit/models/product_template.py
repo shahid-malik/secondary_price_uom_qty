@@ -35,4 +35,4 @@ class ProductCategory(models.Model):
 class ProductProduct(models.Model):
     _inherit = 'product.product'
 
-    is_secondary_conversions = fields.Boolean(string='Enable secondary conversions')
+    is_secondary_conversions = fields.Boolean(string='Secondary conversions')
