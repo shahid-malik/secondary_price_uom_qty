@@ -34,7 +34,7 @@ class SaleOrderLine(models.Model):
                     )
                     != 0
             ):
-                # self.product_uom_qty = qty
+                self.product_uom_qty = qty
                 self.secondary_sale_price = self.price_unit * factor
         else:
             self.secondary_sale_price = self.price_unit
