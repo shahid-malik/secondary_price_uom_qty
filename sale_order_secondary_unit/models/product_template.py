@@ -30,3 +30,9 @@ class ProductCategory(models.Model):
         comodel_name="uom.uom",
         string="2nd UoM",
     )
+
+
+class ProductProduct(models.Model):
+    _inherit = 'product.product'
+
+    is_secondary_conversions = fields.Boolean(string='Enable secondary conversions')

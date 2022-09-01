@@ -27,7 +27,7 @@
         </field>
     </record>
 
-    <!--product category form inherit-->
+    <!--product.category form inherit-->
 
     <record id="product_category_form_view" model="ir.ui.view">
         <field name="name">product.category.form.view</field>
@@ -39,4 +39,18 @@
             </xpath>
         </field>
     </record>
+
+    <!--product.product form inherit-->
+
+    <record id="product_product_form_view" model="ir.ui.view">
+        <field name="name">product.product.form.view</field>
+        <field name="model">product.product</field>
+        <field name="inherit_id" ref="product.product_normal_form_view" />
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='uom_id']" position="after">
+                 <field name="is_secondary_conversions"/>
+            </xpath>
+        </field>
+    </record>
+
 </odoo>
