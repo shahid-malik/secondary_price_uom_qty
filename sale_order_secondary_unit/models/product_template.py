@@ -21,3 +21,12 @@ class ProductTemplate(models.Model):
         return {
             'domain': {'purchase_secondary_uom_id': [('category_id', '=', categ_id.id)]}
         }
+
+
+class ProductCategory(models.Model):
+    _inherit = 'product.category'
+
+    secondary_uom_id = fields.Many2one(
+        comodel_name="uom.uom",
+        string="2nd UoM",
+    )
