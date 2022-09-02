@@ -21,7 +21,8 @@ class PurchaseOrderLine(models.Model):
     def _onchange_secondary_uom(self):
         if not self.secondary_uom_id:
             return
-        factor = self.secondary_uom_id.factor * self.product_uom.factor
+        # factor = self.secondary_uom_id.factor * self.product_uom.factor
+        factor = self.secondary_uom_id.factor_inv
         qty = float_round(
             self.secondary_uom_qty * factor,
             precision_rounding=self.product_uom.rounding,
@@ -38,7 +39,8 @@ class PurchaseOrderLine(models.Model):
     def _onchange_product_qty_purchase_order_secondary_unit(self):
         if not self.secondary_uom_id:
             return
-        factor = self.secondary_uom_id.factor * self.product_uom.factor
+        # factor = self.secondary_uom_id.factor * self.product_uom.factor
+        factor = self.secondary_uom_id.factor_inv
         # qty = float_round(
         #     self.product_qty / (factor or 1.0),
         #     precision_rounding=self.secondary_uom_id.uom_id.rounding,
@@ -83,10 +85,32 @@ class PurchaseOrderLine(models.Model):
 
     @api.onchange("product_id")
     def _onchange_product_id_purchase_order_secondary_unit(self):
-        self.secondary_uom_id = self.product_id.standard_price
-        self.secondary_purchase_price = self.product_id.standard_price
-        self.secondary_uom_id = self.product_id.purchase_secondary_uom_id
+        if not self.product_id.is_secondary_conversions:
+            self.secondary_uom_id = self.product_id.purchase_secondary_uom_id if self.product_id.purchase_secondary_uom_id else False
+            self.secondary_uom_qty = self.secondary_uom_id.factor_inv or 1.0
+            self.secondary_purchase_price = self.price_unit or 0.0
+        # self.secondary_uom_id = self.product_id.standard_price
+        # self.secondary_purchase_price = self.product_id.standard_price
+        # self.secondary_uom_id = self.product_id.purchase_secondary_uom_id
 
+
+    @api.onchange('price_subtotal')
+    def _onchange_purchase_price_subtotal(self):
+        if self.price_subtotal and self.price_unit:
+            self.product_qty = self.price_subtotal / self.price_unit
+
+    @api.onchange('price_unit')
+    def _onchange_price_unit(self):
+        if self.product_id.is_secondary_conversions:
+            self.secondary_purchase_price = self.price_unit * self.secondary_uom_id.factor_inv
+        else:
+            self.secondary_purchase_price = self.price_unit
+
+    @api.onchange('secondary_purchase_price')
+    def onchange_secondary_purchase_price(self):
+        if self.product_id.is_secondary_conversions:
+            factor = self.secondary_uom_id.factor_inv
+            self.price_unit = self.secondary_purchase_price / factor
 
     # @api.onchange("product_uom")
     # def product_uom_id_change(self):
