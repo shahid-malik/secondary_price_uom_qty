@@ -17,12 +17,33 @@ class SaleOrderLine(models.Model):
     )
     secondary_sale_price = fields.Float('2nd Price', default=0.0)
 
-    @api.onchange("secondary_uom_id", "secondary_uom_qty")
+    @api.onchange("secondary_uom_id")
     def onchange_secondary_uom(self):
         if not self.secondary_uom_id:
             return
         if self.product_id.is_secondary_conversions:
-            # factor = self.secondary_uom_id.factor * self.product_uom.factor
+            factor = self.secondary_uom_id.factor_inv
+            qty = float_round(
+                self.product_uom_qty / factor,
+                precision_rounding=self.product_uom.rounding,
+            )
+            if (
+                    float_compare(
+                        self.product_uom_qty, qty, precision_rounding=self.product_uom.rounding
+                    )
+                    != 0
+            ):
+                self.secondary_uom_qty = qty
+                self.secondary_sale_price = self.price_unit * factor
+        else:
+            self.secondary_sale_price = self.price_unit
+            self.secondary_uom_qty = self.secondary_uom_id.factor_inv if self.secondary_uom_id else False
+
+    @api.onchange("secondary_uom_qty")
+    def _onchange_secondary_qty(self):
+        if not self.secondary_uom_id:
+            return
+        if self.product_id.is_secondary_conversions:
             factor = self.secondary_uom_id.factor_inv
             qty = float_round(
                 self.secondary_uom_qty * factor,
@@ -35,10 +56,6 @@ class SaleOrderLine(models.Model):
                     != 0
             ):
                 self.product_uom_qty = qty
-                self.secondary_sale_price = self.price_unit * factor
-        else:
-            self.secondary_sale_price = self.price_unit
-            self.secondary_uom_qty = self.secondary_uom_id.factor_inv if self.secondary_uom_id else False
 
     @api.onchange("product_uom_qty")
     def onchange_secondary_unit_product_uom_qty(self):
@@ -50,24 +67,13 @@ class SaleOrderLine(models.Model):
             self.secondary_uom_qty = self.secondary_uom_id.factor_inv
             return
 
-        # factor = self.secondary_uom_id.factor * self.product_uom.factor
         if self.product_id.is_secondary_conversions:
             factor = self.secondary_uom_id.factor_inv
-            # qty = float_round(
-            #     self.product_uom_qty / (factor or 1.0),
-            #     precision_rounding=self.secondary_uom_id.uom_id.rounding,
-            # )
             qty = float_round(
-                # self.product_uom_qty / (factor or 1.0),
                 self.product_uom_qty / (factor or 1.0),
                 precision_rounding=self.secondary_uom_id.rounding,
             )
             if (
-                    # float_compare(
-                    #     self.secondary_uom_qty,
-                    #     qty,
-                    #     precision_rounding=self.secondary_uom_id.uom_id.rounding,
-                    # )
                     float_compare(
                         self.secondary_uom_qty,
                         qty,
@@ -77,25 +83,6 @@ class SaleOrderLine(models.Model):
             ):
                 self.secondary_uom_qty = qty
                 self.secondary_sale_price = self.price_unit * factor
-
-    # @api.onchange("product_uom")
-    # def onchange_product_uom_for_secondary(self):
-    #     if not self.secondary_uom_id:
-    #         return
-    #     factor = self.product_uom.factor * self.secondary_uom_id.factor
-    #     qty = float_round(
-    #         self.product_uom_qty / (factor or 1.0),
-    #         precision_rounding=self.product_uom.rounding,
-    #     )
-    #     if (
-    #             float_compare(
-    #                 self.secondary_uom_qty,
-    #                 qty,
-    #                 precision_rounding=self.product_uom.rounding,
-    #             )
-    #             != 0
-    #     ):
-    #         self.secondary_uom_qty = qty
 
     @api.onchange("product_id")
     def product_id_change(self):
@@ -115,8 +102,6 @@ class SaleOrderLine(models.Model):
         if self.secondary_uom_id:
             self.secondary_uom_qty = 1.0
             self.secondary_sale_price = self.price_unit
-            # self.secondary_purchase_price = self.price_unit
-            # self.onchange_secondary_uom()
 
         if self.product_uom.name == 'CTN of 10' and self.secondary_uom_id == 'CTN of Mix Kg':
             self.secondary_sale_price = self.price_unit / self.secondary_sale_price
@@ -147,8 +132,3 @@ class SaleOrderLine(models.Model):
             factor = self.secondary_uom_id.factor_inv
             self.price_unit = self.secondary_sale_price / factor
 
-    # @api.onchange('enable_conversions')
-    # def _onchange_enable_conversions(self):
-    #     if not self.enable_conversions:
-    #         self.secondary_sale_price = self.price_unit
-    #         self.secondary_uom_qty = self.secondary_uom_id.factor_inv if self.secondary_uom_id else False
