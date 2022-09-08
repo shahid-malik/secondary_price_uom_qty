@@ -101,8 +101,8 @@ class SaleOrderLine(models.Model):
 
     @api.onchange("price_subtotal")
     def _onchange_subtotal_amount(self):
-        if self.price_subtotal and self.price_unit and self.price_unit > 0:
-            self.product_uom_qty = self.price_subtotal / self.price_unit
+        if self.price_subtotal and self.product_uom_qty > 0:
+            self.price_unit = self.price_subtotal / self.product_uom_qty
 
     # @api.onchange("secondary_uom_id")
     # def onchange_secondary_uom(self):
