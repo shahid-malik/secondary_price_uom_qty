@@ -67,7 +67,7 @@ class PurchaseOrderLine(models.Model):
             sec_uom_factor = self.secondary_uom_id.factor_inv or 1.0
             if self.product_uom == self.secondary_uom_id:
                 self.secondary_uom_qty = self.product_qty or 1.0
-                self.secondary_sale_price = self.price_unit
+                self.secondary_purchase_price = self.price_unit
             elif uom_factor > sec_uom_factor:
                 self.secondary_purchase_price = (self.price_unit / uom_factor) * sec_uom_factor
             elif uom_factor < sec_uom_factor:
@@ -105,7 +105,7 @@ class PurchaseOrderLine(models.Model):
             uom_factor = self.product_uom.factor_inv or 1.0
             sec_uom_factor = self.secondary_uom_id.factor_inv or 1.0
             if self.product_uom == self.secondary_uom_id:
-                self.secondary_uom_qty = self.product_uom_qty or 1.0
+                self.secondary_uom_qty = self.product_qty or 1.0
                 self.secondary_purchase_price = self.price_unit
             elif uom_factor > sec_uom_factor:
                 self.price_unit = (self.secondary_purchase_price * uom_factor) / sec_uom_factor
