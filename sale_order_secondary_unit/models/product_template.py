@@ -10,6 +10,7 @@ class ProductTemplate(models.Model):
         print(self)
         self.secondary_sale_price = self.list_price
 
+    is_secondary_conversions = fields.Boolean(string='Secondary conversions')
     sale_secondary_uom_id = fields.Many2one(
         comodel_name="uom.uom", string="Secondary unit for Sales"
     )
@@ -32,7 +33,7 @@ class ProductCategory(models.Model):
     )
 
 
-class ProductProduct(models.Model):
-    _inherit = 'product.product'
-
-    is_secondary_conversions = fields.Boolean(string='Secondary conversions')
+# class ProductProduct(models.Model):
+#     _inherit = 'product.product'
+#
+#     is_secondary_conversions = fields.Boolean(string='Secondary conversions')

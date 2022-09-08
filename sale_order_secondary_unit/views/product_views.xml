@@ -5,25 +5,36 @@
     <record id="product_template_form_view" model="ir.ui.view">
         <field name="name">Product template Secondary Unit</field>
         <field name="model">product.template</field>
-        <field name="inherit_id" ref="product.product_template_form_view" />
-        <field name="groups_id" eval="[(4, ref('uom.group_uom'))]" />
+        <field name="inherit_id" ref="product.product_template_form_view"/>
+        <field name="groups_id" eval="[(4, ref('uom.group_uom'))]"/>
         <field name="arch" type="xml">
-            <field name="uom_id" position="after">
-                <field name="disable_uom" invisible="1"/>
-                <!--<field
-                    name="sale_secondary_uom_id"
-                    domain="[('product_tmpl_id', '=', id)]"
-                    options="{'no_create': True}"
-                    attrs="{'required': [('disable_uom', '=', False)]}"
-                />-->
+            <xpath expr="//group[@name='inventory']" position="inside">
+                <group string="Secondary Conversions">
+                    <field name="disable_uom" invisible="1"/>
+                    <field name="is_secondary_conversions"/>
+                    <!--<field
+                        name="sale_secondary_uom_id"
+                        domain="[('product_tmpl_id', '=', id)]"
+                        options="{'no_create': True}"
+                        attrs="{'required': [('disable_uom', '=', False)]}"
+                    />-->
 
-                <field
-                    name="sale_secondary_uom_id"
+                    <field
+                            name="sale_secondary_uom_id"
+                            options="{'no_create': True}"
+                            attrs="{'required': [('disable_uom', '=', False)]}"
+                    />
+                    <field name="secondary_sale_price" attrs="{'required': [('disable_uom', '=', False)]}"/>
+                    <field string="Secondary unit for Purchases"
+                    name="purchase_secondary_uom_id"
                     options="{'no_create': True}"
-                    attrs="{'required': [('disable_uom', '=', False)]}"
+                       attrs="{'required': [('disable_uom', '=', False)]}"
                 />
-                <field name="secondary_sale_price" attrs="{'required': [('disable_uom', '=', False)]}"/>
-            </field>
+                <field name="disable_uom" invisible="1"/>
+                <field name="secondary_purchase_price" string="2nd Purchase Price"
+                attrs="{'required': [('disable_uom', '=', False)]}"/>
+                </group>
+            </xpath>
         </field>
     </record>
 
@@ -32,17 +43,17 @@
     <record id="product_category_form_view" model="ir.ui.view">
         <field name="name">product.category.form.view</field>
         <field name="model">product.category</field>
-        <field name="inherit_id" ref="product.product_category_form_view" />
+        <field name="inherit_id" ref="product.product_category_form_view"/>
         <field name="arch" type="xml">
             <xpath expr="//field[@name='property_valuation']" position="after">
-                 <field name="secondary_uom_id"/>
+                <field name="secondary_uom_id"/>
             </xpath>
         </field>
     </record>
 
     <!--product.product form inherit-->
 
-    <record id="product_product_form_view" model="ir.ui.view">
+    <!--<record id="product_product_form_view" model="ir.ui.view">
         <field name="name">product.product.form.view</field>
         <field name="model">product.product</field>
         <field name="inherit_id" ref="product.product_normal_form_view" />
@@ -51,6 +62,6 @@
                  <field name="is_secondary_conversions"/>
             </xpath>
         </field>
-    </record>
+    </record>-->
 
 </odoo>
